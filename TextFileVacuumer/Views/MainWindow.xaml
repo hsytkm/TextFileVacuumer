@@ -1,0 +1,96 @@
+﻿<Window
+    x:Class="TextFileVacuumer.Views.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+    xmlns:views="clr-namespace:TextFileVacuumer.Views"
+    Title="TextFileVacuumer"
+    Width="700"
+    Height="600"
+    FontSize="{StaticResource FontSizeMedium}"
+    ResizeMode="CanResizeWithGrip"
+    mc:Ignorable="d">
+
+    <DockPanel Margin="10">
+        <ui:TextBlock DockPanel.Dock="Top" Text="Target directory" />
+        <ui:TextBox
+            DockPanel.Dock="Top"
+            PlaceholderText="C:\root"
+            Text="{Binding RootDirectoryText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+        <ui:TextBlock
+            Margin="0,10,0,0"
+            DockPanel.Dock="Top"
+            Text="Save directory" />
+        <ui:TextBox
+            DockPanel.Dock="Top"
+            PlaceholderText="C:\save"
+            Text="{Binding SaveDirectoryText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+        <Grid Margin="0,10,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" MinWidth="50" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" MinWidth="50" />
+            </Grid.ColumnDefinitions>
+
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <TextBlock Text="Target Directories" />
+                <Border
+                    Grid.Row="1"
+                    Margin="3,0"
+                    BorderBrush="Gray"
+                    BorderThickness="1">
+                    <TreeView ItemsSource="{Binding DirectoryViewModels, Mode=OneWay}">
+                        <TreeView.ItemTemplate>
+                            <HierarchicalDataTemplate ItemsSource="{Binding Children, Mode=OneWay}">
+                                <StackPanel Orientation="Horizontal">
+                                    <CheckBox Margin="2" IsChecked="{Binding IsSelected, Mode=TwoWay}" />
+                                    <TextBlock Margin="2" Text="{Binding Name, Mode=OneTime}" />
+                                </StackPanel>
+                            </HierarchicalDataTemplate>
+                        </TreeView.ItemTemplate>
+                    </TreeView>
+                </Border>
+            </Grid>
+
+            <GridSplitter
+                Grid.Column="1"
+                Width="5"
+                Margin="5,0"
+                HorizontalAlignment="Stretch"
+                Background="LightGray"
+                IsTabStop="False" />
+
+            <Grid Grid.Column="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <!--<TextBlock Text="Copy Files" />-->
+                <TextBlock Text="{Binding TargetFiles.Count, Mode=OneWay, StringFormat='Copy Files ({0} files)'}" />
+                <Border
+                    Grid.Row="1"
+                    Margin="3,0"
+                    BorderBrush="Gray"
+                    BorderThickness="1">
+                    <ListBox Grid.Row="1" ItemsSource="{Binding TargetFiles, Mode=OneWay}">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding FullPath, Mode=OneTime}" />
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </Border>
+            </Grid>
+        </Grid>
+    </DockPanel>
+</Window>
